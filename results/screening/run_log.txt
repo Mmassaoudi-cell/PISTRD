@@ -1,0 +1,36 @@
+=== case14 ===
+C1_RLS_CUSUM case14 macro_f1= 0.629 time 1.4
+C3_PIRK case14 macro_f1= 0.996 time 1.2
+C2_STGAT case14 0 macro_f1= 0.621 time 88.0
+C4_TCN_CP case14 0 macro_f1= 0.58 time 19.3
+C2_STGAT case14 1 macro_f1= 0.694 time 66.7
+C4_TCN_CP case14 1 macro_f1= 0.551 time 28.8
+C2_STGAT case14 2 macro_f1= 0.712 time 49.7
+C4_TCN_CP case14 2 macro_f1= 0.546 time 22.3
+=== case39 ===
+C1_RLS_CUSUM case39 macro_f1= 0.558 time 1.4
+C3_PIRK case39 macro_f1= 0.997 time 1.6
+C2_STGAT case39 0 macro_f1= 0.668 time 102.9
+C4_TCN_CP case39 0 macro_f1= 0.56 time 22.9
+C2_STGAT case39 1 macro_f1= 0.723 time 71.4
+C4_TCN_CP case39 1 macro_f1= 0.54 time 16.1
+C2_STGAT case39 2 macro_f1= 0.706 time 69.3
+C4_TCN_CP case39 2 macro_f1= 0.588 time 13.2
+=== case57 ===
+C1_RLS_CUSUM case57 macro_f1= 0.637 time 1.7
+C3_PIRK case57 macro_f1= 0.999 time 2.4
+C2_STGAT case57 0 macro_f1= 0.607 time 94.0
+C4_TCN_CP case57 0 macro_f1= 0.484 time 16.5
+C2_STGAT case57 1 macro_f1= 0.742 time 108.4
+C4_TCN_CP case57 1 macro_f1= 0.491 time 14.7
+C2_STGAT case57 2 macro_f1= 0.745 time 75.4
+C4_TCN_CP case57 2 macro_f1= 0.48 time 10.6
+=== case118 ===
+C1_RLS_CUSUM case118 macro_f1= 0.765 time 2.7
+C3_PIRK case118 macro_f1= 0.999 time 4.5
+C2_STGAT case118 0 macro_f1= 0.639 time 277.0
+C4_TCN_CP case118 0 macro_f1= 0.568 time 11.5
+C2_STGAT case118 1 macro_f1= 0.715 time 216.5
+C4_TCN_CP case118 1 macro_f1= 0.559 time 6.7
+C2_STGAT case118 2 macro_f1= 0.708 time 180.9
+C4_TCN_CP case118 2 macro_f1= 0.561 time 6.0

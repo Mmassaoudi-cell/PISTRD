@@ -1,0 +1,63 @@
+# FINAL_MODEL_CONFIG.yaml
+# Frozen per master-prompt Section 11. No architecture change is permitted
+# after this point based on TEST performance. If TEST results disappoint,
+# they are reported as-is (see REPRODUCTION_REPORT.md's own precedent of
+# reporting honest gaps rather than re-tuning against ground truth).
+
+model:
+  name: "PISTRD (Physics-Informed Spatio-Temporal Residual Detector)"
+  source_candidate: "Candidate 3 (PIRK), extended per MODEL_SELECTION_REPORT.md"
+  implementation: "src/candidates/pirk_final.py (class PISTRD)"
+  branches:
+    temporal:
+      description: "Joint one-step linear (ridge) predictor + full-covariance Mahalanobis residual over all sensor lines"
+      ridge_alpha: 1.0
+      cov_reg: 1.0e-3
+    spatial:
+      description: "DC power-flow WLS state-estimation residual using the true topology observation matrix (src/candidates/physics_utils.py), Tikhonov-regularized"
+      spatial_reg: 1.0e-2
+  fusion:
+    type: "OR-fusion of two independently-calibrated branch thresholds, reported both as a binary flag (formal FAR target) and as a normalized max-score (for the standard F1-optimal-threshold protocol used across all benchmarks)"
+    alpha_total: 0.05
+    alpha_per_branch: 0.025
+
+datasets:
+  testbeds: ["case14", "case39", "case57", "case118"]
+  source: "PandaPower networks, DC power flow, driven by real PJM hourly load data"
+  path: "results/data/<testbed>_<split>.npz and *_stats.csv"
+  manifest: "DATA_SPLIT_MANIFEST.csv"
+
+features:
+  primary_stream: "encoded (enc_stat_*)"  # source-method-consistent dither-encoded stream
+  window_len: 12
+  representation: "aggregated per-window statistics (mean/std/min/max/last per sensor); temporal/spatial branches operate on the 'last' (current raw measurement) sub-block"
+
+split:
+  policy: "chronological, 60/20/20 (train/val/test), no shuffling"
+  train_range_hours: [0, 1800]
+  val_range_hours: [1800, 2400]
+  test_range_hours: [2400, 3000]
+
+preprocessing:
+  noise_dither_scaling: "fit on TRAIN split statistics only (NOISE_FRAC=0.02, DITHER_FRAC=0.06)"
+  branch_fitting: "temporal + spatial branch parameters fit on TRAIN only"
+  threshold_calibration: "fit on VAL only (both the F1-optimal single-threshold protocol and the alpha/2 per-branch quantile protocol)"
+
+training_procedure:
+  type: "closed-form (ridge regression + covariance estimation + regularized least squares) -- no gradient descent, no epochs, no early stopping needed"
+  seeds: "not applicable (deterministic given data; no random initialization)"
+
+model_selection_metric: "macro-F1 on validation split (primary); minority-class recall, FPR, PR-AUC, ROC-AUC reported as secondary"
+
+hyperparameter_sensitivity:
+  checked: "ridge_alpha in {0.1, 1.0, 10.0}, cov_reg in {1e-4, 1e-3, 1e-2} on case14 and case118, validation macro-F1"
+  finding: "Essentially insensitive to ridge_alpha; cov_reg=1e-3 marginally best/tied. Confirms result is not a fragile, cherry-picked hyperparameter artifact."
+
+validation_screening_result_snapshot:
+  macro_f1_by_testbed: {case14: 0.9837, case39: 0.9937, case57: 0.9936, case118: 0.9984}
+  note: "From VALIDATION split only, per MODEL_SELECTION_REPORT.md. TEST split has not been touched at the time this file was frozen."
+
+class_balancing: "none applied (natural imbalance retained, ~2-9.5% positive rate per DATA_SPLIT_MANIFEST.csv); macro-F1 chosen as primary metric specifically because of this imbalance"
+
+frozen_date: "2026-08-21"
+frozen_by_process: "Steps 1-13 of the agreed execution order; TEST evaluation (Step 15) and the 10+ benchmark suite (Step 14) follow this freeze"

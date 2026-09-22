@@ -1,0 +1,17 @@
+model,n_pairs,mean_macro_f1,PISTRD_mean_macro_f1_matched,mean_diff_(benchmark_minus_PISTRD),wilcoxon_p_raw,rank_biserial_effect_size,low_power_n4,p_holm,holm_significant,verdict,verdict_basis
+LSTM,12,0.5065,0.9923,-0.4858,0.00048828125,-1.0,False,0.00439453125,True,PISTRD_statistically_superior,tested
+C4_TCN_CP,12,0.5067,0.9923,-0.4856,0.00048828125,-1.0,False,0.00439453125,True,PISTRD_statistically_superior,tested
+SourceMethodAdapted,4,0.5241,0.9923,-0.4682,0.125,-1.0,True,0.625,False,PISTRD_practically_superior,descriptive_only_n4
+kNN,4,0.5291,0.9923,-0.4632,0.125,-1.0,True,0.625,False,PISTRD_practically_superior,descriptive_only_n4
+MLP,20,0.5343,0.9923,-0.458,8.844915021211901e-05,-1.0,False,0.00094751657695531,True,PISTRD_statistically_superior,tested
+SVM_RBF,4,0.5459,0.9923,-0.4465,0.125,-1.0,True,0.625,False,PISTRD_practically_superior,descriptive_only_n4
+Transformer,12,0.5501,0.9923,-0.4422,0.00048828125,-1.0,False,0.00439453125,True,PISTRD_statistically_superior,tested
+C1_RLS_CUSUM,4,0.6324,0.9923,-0.3599,0.125,-1.0,True,0.625,False,PISTRD_practically_superior,descriptive_only_n4
+C2_STGAT,12,0.6328,0.9923,-0.3595,0.00048828125,-1.0,False,0.00439453125,True,PISTRD_statistically_superior,tested
+ExtraTrees,20,0.6341,0.9923,-0.3582,1.9073486328125e-06,-1.0,False,3.0517578125e-05,True,PISTRD_statistically_superior,tested
+RandomForest,20,0.6695,0.9923,-0.3228,1.9073486328125e-06,-1.0,False,3.0517578125e-05,True,PISTRD_statistically_superior,tested
+XGBoost,20,0.6746,0.9923,-0.3177,7.895971474627584e-05,-1.0,False,0.00094751657695531,True,PISTRD_statistically_superior,tested
+CatBoost,20,0.6828,0.9923,-0.3095,1.9073486328125e-06,-1.0,False,3.0517578125e-05,True,PISTRD_statistically_superior,tested
+HistGB,20,0.6984,0.9923,-0.294,1.9073486328125e-06,-1.0,False,3.0517578125e-05,True,PISTRD_statistically_superior,tested
+LightGBM,20,0.699,0.9923,-0.2933,7.895971474627584e-05,-1.0,False,0.00094751657695531,True,PISTRD_statistically_superior,tested
+LogReg,4,0.7471,0.9923,-0.2452,0.125,-1.0,True,0.625,False,PISTRD_practically_superior,descriptive_only_n4
