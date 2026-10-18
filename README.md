@@ -8,49 +8,9 @@ This repository contains the method source code and reproducibility documentatio
 ```bash
 pip install -r requirements.txt
 
-# 1. Reproduce the source paper's own DC-motor experiment
-python src/reproduction/run_reproduction.py --n_mc 1000 --n_calib 300
-python src/reproduction/make_report_table.py
-
-# 2. Build the multi-testbed power-system dataset (IEEE 14/39/57/118-bus)
-python src/pipeline/build_dataset.py
-
-# 3. Candidate screening (validation-only, 3 seeds x 4 testbeds x 4 candidates)
-python src/screening/run_screening.py --n_mc 1000 --n_calib 300
-python src/screening/aggregate_screening.py
-
-# 4. Ablation / dither-necessity / partial-replay robustness (final model)
-python src/ablation/run_ablation.py
-python src/ablation/dither_necessity.py
-python src/robustness/partial_replay.py
-
-# 5. Full 10+ benchmark suite against the frozen final model
-python src/benchmarks/run_benchmarks.py
-
-# 6. Statistics, figures, tables
-python src/stats/wtl_analysis.py
-python src/figures/make_figures.py
-python src/figures/make_schematics.py
-python src/figures/make_tables.py
-
 ```
 
-## Repository layout
-
-```
-src/reproduction/   source-method reproduction (DC-motor testbed)
-src/pipeline/       multi-testbed power-system data generation (PandaPower + real load data)
-src/candidates/     4 hybrid candidates (RLS-CUSUM, STGAT, PIRK/PISTRD, TCN-CP) + shared utilities
-src/benchmarks/     10+ classical/boosting/DL benchmark implementations
-src/screening/      validation-only candidate screening + aggregation
-src/ablation/       ablation + dither-necessity experiments
-src/robustness/     partial-replay robustness experiment
-src/stats/          Wilcoxon/Holm win-tie-loss analysis
-src/figures/        all figure/table generation (data-driven, no hand-typed numbers)
-src/eval/           shared evaluation harness (val-only threshold selection)
-results/            raw and aggregated result CSVs (large NPZ data caches are gitignored; regenerate via src/pipeline/build_dataset.py)
-```
 
 ## Key result
 
-PISTRD (Physics-Informed Spatio-Temporal Residual Detector) wins all 16 benchmark comparisons on the held-out TEST split across 4 IEEE bus testbeds (macro-F1 0.984–0.998 vs. 0.51–0.75 for the best alternatives), while running 5–35x faster than every deep-learning competitor. A dedicated ablation shows this is only possible because of — not despite — the source paper's stochastic measurement-encoding mechanism, which remains essential at this much larger scale.
+PISTRD (Physics-Informed Spatio-Temporal Residual Detector) wins all 16 benchmark comparisons on the held-out TEST split across 4 IEEE bus testbeds (macro-F1 0.984–0.998 vs. 0.51–0.75 for the best alternatives), while running 5–35x faster than every deep-learning competitor.
