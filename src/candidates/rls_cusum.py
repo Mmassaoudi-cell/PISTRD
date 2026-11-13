@@ -5,7 +5,7 @@ boundaries). Operates on the 'last' raw measurement per window (the stats
 CSV's enc_stat/plain_stat block index 4), which is exactly z_t at the
 window's current time step.
 
-Implements Candidate 1 from MODEL_CANDIDATES.md: replaces the source paper's
+Candidate 1 replaces the source paper's
 frozen batch least-squares H_y with an online recursive update, and replaces
 its max-of-sample threshold with a CUSUM statistic against an adaptive
 exponential-moving-average residual-energy baseline.

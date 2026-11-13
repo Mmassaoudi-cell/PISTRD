@@ -1,5 +1,5 @@
 """IEEE bus-system testbed loading + topology extraction for the multi-testbed
-power-system replay-attack extension (see DATA_AUDIT.md)."""
+power-system replay-attack study."""
 import numpy as np
 import pandapower as pp
 import pandapower.networks as pn

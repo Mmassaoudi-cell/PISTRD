@@ -2,7 +2,7 @@
 to LINE flows specifically (excluding transformers, which are not part of
 our measured stream) -- verified empirically that PandaPower's internal
 `Bf` matrix's first n_line rows, in order, exactly reconstruct
-net.res_line.p_from_mw (see conversation record / DATA_AUDIT.md note)."""
+net.res_line.p_from_mw."""
 import numpy as np
 import pandapower as pp
 from testbeds import get_testbed

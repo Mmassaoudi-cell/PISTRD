@@ -1,5 +1,5 @@
 """Shared evaluation harness used by every candidate and every benchmark, so
-all numbers in MODEL_SELECTION_REPORT.md / the final benchmark tables come
+all screening numbers and the final benchmark tables come
 from one consistent implementation. Threshold selection (when needed) must
 only ever be fit on VALIDATION scores/labels, never on TEST -- enforced by
 callers passing val_scores/val_y separately from test_scores/test_y."""

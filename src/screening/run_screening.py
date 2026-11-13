@@ -1,4 +1,4 @@
-"""Stage 2 validation-only candidate screening (master-prompt Section 9):
+"""Validation-only candidate screening:
 evaluates all 4 candidates on all 4 testbeds, 3 seeds each, TRAIN+VAL only
 (TEST is never touched here). Writes results/screening/screening_results.csv
 incrementally so progress survives if the run is interrupted.

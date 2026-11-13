@@ -1,9 +1,9 @@
 """Robustness experiment: PARTIAL/subset replay attacks -- only a random
 fraction of sensors are replayed during the attack window, the rest stay
 live. This is the scenario the spatial (physics) branch was actually added
-for (MODEL_SELECTION_REPORT.md): a whole-vector replay is spatially
-self-consistent by construction (DITHER_NECESSITY_FINDING.md confirms the
-spatial branch adds nothing there), but a PARTIAL replay breaks the
+for: a whole-vector replay is spatially self-consistent by construction
+(src/ablation/dither_necessity.py quantifies what the spatial branch adds
+there), but a PARTIAL replay breaks the
 physical relationship among lines and should be visible to a topology-aware
 residual even when the dither/temporal signal alone might be weaker (fewer
 attacked dimensions contributing to any joint statistic).
@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT / "src" / "candidates"))
 sys.path.insert(0, str(ROOT / "src" / "eval"))
 sys.path.insert(0, str(ROOT / "src" / "pipeline"))
 
-from attacks import generate_scenario, scenario_to_labels
+from attacks import generate_scenario, scenario_to_labels, stable_seed
 from pirk_final import PISTRD
 from metrics import evaluate_model, compute_metrics
 
@@ -45,7 +45,7 @@ def build_partial_test_stats(testbed: str, n_line: int, fraction: float, noise_s
 
     rows = []
     for sidx in range(N_SCENARIOS):
-        rng = np.random.default_rng(hash((testbed, "partial", fraction, sidx)) % (2**32))
+        rng = np.random.default_rng(stable_seed(testbed, "partial", fraction, sidx))
         scenario = generate_scenario(W, Tb, rng)
         e = rng.normal(0.0, noise_std, size=(Tb, n_line))
         d_dither = rng.normal(0.0, dither_std, size=(Tb, n_line))
@@ -73,7 +73,7 @@ def build_partial_test_stats(testbed: str, n_line: int, fraction: float, noise_s
 def main():
     rows = []
     for testbed, n_line in TESTBEDS.items():
-        manifest = pd.read_csv(ROOT / "DATA_SPLIT_MANIFEST.csv")
+        manifest = pd.read_csv(DATA / "DATA_SPLIT_MANIFEST.csv")
         r = manifest[(manifest.testbed == testbed) & (manifest.split == "test")].iloc[0]
         t0, t1 = int(r.t_start), int(r.t_end)
         noise_std = 0.02 * np.load(DATA / f"{testbed}_true_traj.npz")["line_flow"][:1800].std(axis=0)

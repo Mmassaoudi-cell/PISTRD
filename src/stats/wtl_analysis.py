@@ -10,7 +10,7 @@ power to detect anything at alpha=0.05; reported as descriptive only).
 
 Wilcoxon signed-rank test (paired, robust to non-normal macro-F1
 differences), Holm-Bonferroni correction across all benchmark comparisons,
-rank-biserial effect size. Classification per master-prompt Section 15/30:
+rank-biserial effect size. Classification:
   - statistically superior: PISTRD mean > benchmark mean AND Holm-adjusted p < 0.05
   - statistically inferior: benchmark mean > PISTRD mean AND Holm-adjusted p < 0.05
   - practically superior: |mean diff| > 0.02 macro-F1 but not statistically significant (n too small)
@@ -85,7 +85,8 @@ def classify(row):
 
 res[["verdict", "verdict_basis"]] = res.apply(lambda r: pd.Series(classify(r)), axis=1)
 res = res.sort_values("mean_diff_(benchmark_minus_PISTRD)")
-res.to_csv(ROOT / "BENCHMARK_WTL.csv", index=False)
+(ROOT / "results" / "stats").mkdir(parents=True, exist_ok=True)
+res.to_csv(ROOT / "results" / "stats" / "benchmark_wtl.csv", index=False)
 print(res.to_string(index=False))
 
 wins = (res["verdict"].isin(["PISTRD_statistically_superior", "PISTRD_practically_superior"])).sum()

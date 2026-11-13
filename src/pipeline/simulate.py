@@ -3,7 +3,12 @@ IEEE bus testbed, driven by real PJM hourly load data. DC power flow is linear
 so the trajectory depends only on the load-multiplier series, never on
 noise/attack realizations -- computed once per testbed and reused, exactly as
 the DC-motor reproduction reused a single deterministic true trajectory
-across Monte-Carlo repetitions (see cps_qlearning.py)."""
+across Monte-Carlo repetitions (see src/reproduction/cps_qlearning.py).
+
+The load CSV files are not distributed with the code. Place them in
+<repository root>/data/ or point the PISTRD_LOAD_DIR environment variable at
+the folder that holds them (see README.md, "Data")."""
+import os
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -11,7 +16,9 @@ import pandapower as pp
 
 from testbeds import get_testbed, get_topology_edges
 
-LOAD_CSV = r"C:\Users\MMASSAOUDI\Desktop\Data\Load Data\PJM_Load_hourly.csv"
+ROOT = Path(__file__).resolve().parents[2]
+LOAD_DIR = Path(os.environ.get("PISTRD_LOAD_DIR", ROOT / "data"))
+LOAD_CSV = LOAD_DIR / "PJM_Load_hourly.csv"
 
 
 def load_multiplier_series(T: int, start_offset: int = 0) -> np.ndarray:

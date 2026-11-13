@@ -1,8 +1,7 @@
 """
 Runs the faithful reproduction of the source paper's Table II and Table III
-(our-method columns only -- see SOURCE_PAPER_AUDIT.md for why the [19]/[27]
-baselines are not byte-for-byte reproduced here) and writes CSV + a
-REPRODUCTION_REPORT.md comparing published vs. reproduced numbers.
+(proposed-method columns only; the paper's two comparison baselines are not
+reproduced here) and writes a CSV comparing published vs. reproduced numbers.
 """
 import sys
 import time
@@ -33,7 +32,7 @@ def calibrate_threshold(rep: SourceMethodReproduction, n_calib: int, seed0: int)
     calibration runs. Median (not mean) is used because sup() of a noisy
     statistic is right-skewed across realizations; median best matches a
     single 'representative' calibration run of the kind the paper's Fig. 1(a)
-    appears to report (see REPRODUCTION_REPORT.md, threshold-calibration note)."""
+    appears to report."""
     vals = []
     for i in range(n_calib):
         rng = np.random.default_rng(1_000_000 + seed0 + i)

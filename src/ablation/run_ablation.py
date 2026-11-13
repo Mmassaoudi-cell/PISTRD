@@ -1,6 +1,6 @@
 """Ablation: Full PISTRD vs. Temporal-branch-only vs. Spatial-branch-only,
-on the FROZEN test split, proving each component's contribution (master
-prompt Section 19). Full model = pirk_final.PISTRD. Temporal-only reuses the
+on the FROZEN test split, quantifying each component's contribution.
+Full model = pirk_final.PISTRD. Temporal-only reuses the
 exact mechanism validated in screening (pirk.PIRKSimplified). Spatial-only
 is a new minimal wrapper using just PISTRD's physics-informed WLS residual.
 """

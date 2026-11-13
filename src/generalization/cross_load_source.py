@@ -1,11 +1,11 @@
-"""Response to Devil's Advocate MAJOR #5: the 4 testbeds all use DC power-flow
+"""Cross-load-source generalization: the 4 testbeds all use DC power-flow
 physics driven by the SAME PJM load series, so they are closer to 1 physical
 scenario at 4 scales than 4 independently-varying scenarios. This experiment
 tests the already-trained, already-frozen PISTRD model (calibrated only on
 PJM-driven TRAIN/VAL) against ENTIRELY NEW, out-of-distribution test data
 generated from two different real load datasets (ISO New England, Malaysia
 national grid) that PISTRD has never seen -- a genuine cross-load-source
-generalization test, using additional real data as requested.
+generalization test on additional real data.
 """
 from pathlib import Path
 import sys
@@ -17,12 +17,12 @@ sys.path.insert(0, str(ROOT / "src" / "pipeline"))
 sys.path.insert(0, str(ROOT / "src" / "candidates"))
 sys.path.insert(0, str(ROOT / "src" / "eval"))
 
-from simulate import simulate_true_trajectory
-from attacks import generate_scenario, scenario_to_labels
+from simulate import simulate_true_trajectory, LOAD_DIR
+from attacks import generate_scenario, scenario_to_labels, stable_seed
 from pirk_final import PISTRD
 from metrics import evaluate_model, compute_metrics, best_threshold_by_f1
 
-DATA_DIR = Path(r"C:\Users\MMASSAOUDI\Desktop\Data\Load Data")
+DATA_DIR = LOAD_DIR  # <repository root>/data by default, or $PISTRD_LOAD_DIR
 OUT = ROOT / "results" / "generalization"
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -62,7 +62,7 @@ def build_ood_test_stats(testbed, n_line, mult, source_name, seed_base):
     Tb = len(mult)
     rows = []
     for sidx in range(N_SCENARIOS):
-        rng = np.random.default_rng(hash((testbed, source_name, sidx, seed_base)) % (2**32))
+        rng = np.random.default_rng(stable_seed(testbed, source_name, sidx, seed_base))
         scenario = generate_scenario(W, Tb, rng)
         e = rng.normal(0.0, noise_std, size=(Tb, n_line))
         d = rng.normal(0.0, dither_std, size=(Tb, n_line))

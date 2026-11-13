@@ -2,11 +2,10 @@
 one-step predictor z_hat_t = A z_{t-1} + b fit by ridge regression on TRAIN
 only, with a Mahalanobis-distance detection statistic using a residual
 covariance also estimated on TRAIN only (a fixed-gain steady-state
-simplification of a full Kalman filter, appropriate for candidate screening
-under the agreed time budget -- see MODEL_SELECTION_REPORT.md). If PIRK wins
-screening, the final model replaces the data-driven A with the DC
-power-flow topology matrix H (true physics-informed version) per
-MODEL_CANDIDATES.md Candidate 3.
+simplification of a full Kalman filter, appropriate for candidate
+screening). The final model (pirk_final.PISTRD) keeps this temporal
+mechanism and adds a physics-informed spatial branch built on the DC
+power-flow topology matrix H.
 
 Score = Mahalanobis distance of the one-step residual at each window's
 current time step ('last' raw value, matching RLS-CUSUM's convention).

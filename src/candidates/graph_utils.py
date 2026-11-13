@@ -5,7 +5,7 @@ original topology. Only the first n_line columns of the combined edges array
 (from testbeds.get_topology_edges, which appends transformer edges after line
 edges) are used to build this adjacency -- transformer connectivity is not
 included as an extra graph node since it is not part of the measured stream
-(documented simplification, see MODEL_SELECTION_REPORT.md)."""
+(a deliberate simplification)."""
 import numpy as np
 
 

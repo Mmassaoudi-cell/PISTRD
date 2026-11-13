@@ -5,8 +5,8 @@ candidate/benchmark under the same protocol); what distinguishes this
 candidate is its DECISION LAYER: instead of a val-set F1-maximizing
 threshold sweep (used by every other model), the operating threshold is set
 via split conformal prediction on a normal-only calibration subset of val,
-giving a finite-sample false-alarm guarantee -- directly targeting weakness
-W1 (fragile, unguaranteed max-of-sample threshold in the source paper).
+giving a finite-sample false-alarm guarantee -- directly targeting the
+fragile, unguaranteed max-of-sample threshold of the source paper.
 """
 import numpy as np
 import torch

@@ -7,8 +7,7 @@ paper's own max-of-sample threshold, this benchmark uses the SAME
 val-F1-optimal threshold-selection protocol as every other benchmark here,
 so the comparison in the main results table is apples-to-apples (this makes
 the baseline stronger than the paper's literal max-of-sample rule would,
-which is the fair/conservative choice per REPRODUCTION_REPORT.md's
-diagnosis of that rule's fragility).
+which is the fair/conservative choice given that rule's fragility).
 """
 import numpy as np
 import pandas as pd

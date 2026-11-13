@@ -1,5 +1,5 @@
 """Turns table2_reproduced_p1.csv into the Published-vs-Reproduced markdown
-table used in REPRODUCTION_REPORT.md. Never hand-type these numbers."""
+table (results/reproduction/table2_comparison.md). Never hand-type these numbers."""
 import pandas as pd
 from pathlib import Path
 

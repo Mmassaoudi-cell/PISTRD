@@ -1,5 +1,5 @@
 """Aggregates results/screening/screening_results.csv into per-candidate,
-per-testbed mean+-std (across seeds) tables for MODEL_SELECTION_REPORT.md."""
+per-testbed mean+-std (across seeds) tables used for model selection."""
 import pandas as pd
 from pathlib import Path
 

@@ -1,4 +1,4 @@
-"""Devil's Advocate CRITICAL #1 response: does giving the strongest tabular
+"""Feature-fairness check: does giving the strongest tabular
 benchmarks an explicit one-step lag/delta feature (the exact structure
 PISTRD's temporal branch is built around) close the gap to PISTRD?
 
@@ -77,7 +77,7 @@ def main():
                                                       n_jobs=-1, verbosity=-1)),
         ):
             r = run_one(name, factory, testbed, n_line)
-            gap_before = 0.9923 - r["baseline"]  # PISTRD's mean, from BENCHMARK_WTL.csv
+            gap_before = 0.9923 - r["baseline"]  # PISTRD's mean test macro-F1 over the 4 testbeds (results/benchmarks/benchmark_results.csv)
             gap_after = 0.9923 - r["with_lag_feature"]
             rows.append({"model": name, "testbed": testbed,
                          "macro_f1_baseline": r["baseline"],

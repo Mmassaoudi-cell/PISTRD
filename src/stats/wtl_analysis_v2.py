@@ -1,4 +1,4 @@
-"""Response to Methodology Reviewer W1/W2: per-testbed statistical tests
+"""Per-testbed statistical protocol: per-testbed statistical tests
 (not pooled across testbeds against a repeated constant), plus explicit
 effective-sample-size reporting (independent attack scenarios, not
 overlapping windows).
@@ -21,7 +21,7 @@ if df_20seed_path.exists():
 else:
     df = df_orig
 pistrd_df = pd.read_csv(ROOT / "results" / "benchmarks" / "benchmark_results.csv")
-manifest = pd.read_csv(ROOT / "DATA_SPLIT_MANIFEST.csv")
+manifest = pd.read_csv(ROOT / "results" / "data" / "DATA_SPLIT_MANIFEST.csv")
 
 pistrd = pistrd_df[pistrd_df.model == "PISTRD_final"].set_index("testbed")["macro_f1"].to_dict()
 testbeds = ["case14", "case39", "case57", "case118"]
@@ -74,6 +74,7 @@ reject, p_adj, _, _ = multipletests(res["fisher_combined_p"], alpha=0.05, method
 res["fisher_p_holm"] = p_adj
 res["holm_significant"] = reject
 res = res.sort_values("mean_macro_f1")
+(ROOT / "results" / "stats").mkdir(parents=True, exist_ok=True)
 res.to_csv(ROOT / "results" / "stats" / "wtl_per_testbed_v2.csv", index=False)
 print(res.to_string(index=False))
 print(f"\nSignificant at Holm-corrected alpha=0.05 (per-testbed sign test, Fisher-combined): "

@@ -1,7 +1,7 @@
 """
 Builds the multi-testbed labeled replay-attack-detection dataset:
   - chronological train/val/test split of the real PJM-load-driven trajectory
-    (no shuffling across time -- prevents leakage per DATA_SPLIT_MANIFEST policy)
+    (no shuffling across time, which prevents temporal leakage)
   - per-split, multiple randomized attack scenarios (attacks.py) injected on
     top of the SAME true trajectory with independent noise/dither draws
   - both a "plain" replay stream (no defense) and an "encoded" replay stream
@@ -9,8 +9,9 @@ Builds the multi-testbed labeled replay-attack-detection dataset:
     benchmarking can test whether the encoding trick still matters once a
     model has access to realistic, non-stationary real-load data
   - noise/dither scale is calibrated from TRAIN-split statistics only
-  - outputs: results/data/<testbed>_<split>.npz (raw sequence windows) and
-    results/data/<testbed>_<split>_stats.csv (aggregated tabular features)
+  - outputs: results/data/<testbed>_<split>.npz (raw sequence windows),
+    results/data/<testbed>_<split>_stats.csv (aggregated tabular features), and
+    results/data/DATA_SPLIT_MANIFEST.csv (split boundaries and class balance)
 """
 from pathlib import Path
 import numpy as np
@@ -20,7 +21,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 from simulate import simulate_true_trajectory
 from testbeds import TESTBEDS
-from attacks import generate_scenario, scenario_to_labels
+from attacks import generate_scenario, scenario_to_labels, stable_seed
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "results" / "data"
@@ -69,7 +70,7 @@ def build_for_testbed(testbed: str):
 
         Xp_list, Xe_list, y_list, stat_rows = [], [], [], []
         for sidx in range(N_SCENARIOS):
-            rng = np.random.default_rng(hash((testbed, split, sidx)) % (2**32))
+            rng = np.random.default_rng(stable_seed(testbed, split, sidx))
             scenario = generate_scenario(W, Tb, rng)
             e = rng.normal(0.0, noise_std, size=(Tb, n_line))
             d = rng.normal(0.0, dither_std, size=(Tb, n_line))
@@ -122,5 +123,5 @@ if __name__ == "__main__":
     for tb in TESTBEDS:
         all_rows.extend(build_for_testbed(tb))
     manifest = pd.DataFrame(all_rows)
-    manifest.to_csv(ROOT / "DATA_SPLIT_MANIFEST.csv", index=False)
+    manifest.to_csv(OUT / "DATA_SPLIT_MANIFEST.csv", index=False)
     print(manifest.to_string(index=False))

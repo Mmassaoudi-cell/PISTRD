@@ -1,7 +1,7 @@
 """Tests whether the source paper's stochastic dither-encoding mechanism is
 still NECESSARY once the empirical surface is extended to realistic,
 non-stationary real-load multi-bus data -- or whether that realism alone
-(as speculated in DATA_AUDIT.md) already makes replay attacks detectable to
+already makes replay attacks detectable to
 a plain residual model. Runs Full/Temporal-only/Spatial-only on BOTH the
 'plain' (no dither) and 'enc' (dither-encoded, source-method-style) streams.
 """

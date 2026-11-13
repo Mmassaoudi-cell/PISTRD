@@ -10,9 +10,9 @@ Implements, from the paper's own equations:
   - residual-based detector with data-derived threshold (Eq. 21-24)
   - the three replay-attack strategies of Section V
 
-See SOURCE_PAPER_AUDIT.md and REPRODUCTION_REPORT.md for every place an
-assumption had to be made because the paper under-specifies an implementation
-detail (persistence-of-excitation injection, output dimension p, N, etc.).
+Where the paper under-specifies an implementation detail (persistence-of-
+excitation injection, output dimension p, window length N), the assumption
+made here is marked with an inline "assumption" comment.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -26,7 +26,7 @@ from scipy.linalg import solve_discrete_are
 # ----------------------------------------------------------------------
 def make_system(output_dim: int = 1):
     """output_dim=1 reproduces the literal C printed in the paper (Eq. 31).
-    output_dim=2 is the documented sensitivity variant (see audit item 1)."""
+    output_dim=2 is a sensitivity variant (assumption: the paper does not state p)."""
     A = np.array([[-0.0022, -0.0030],
                   [1.0625, 0.9808]])
     B = np.array([[0.9516, 0.0],
@@ -75,7 +75,7 @@ def hbar_to_matrix(hbar: np.ndarray, idx_pairs, l: int):
 @dataclass
 class ExperimentConfig:
     output_dim: int = 1
-    N: int = 2                 # historical window length (assumption #4)
+    N: int = 2                 # historical window length (assumption: not stated in the paper)
     Ln: int = 400
     Lt: int = 1000
     f: int = 3
@@ -86,7 +86,7 @@ class ExperimentConfig:
     Rq: float = 0.1
     sigma_e: float = 0.01       # measurement/comprehensive noise variance
     sigma_d: float = 0.1        # encoding dither variance
-    probe_std: float = 0.03     # persistence-of-excitation probe added to u_k for k<Ln (assumption #7)
+    probe_std: float = 0.03     # persistence-of-excitation probe added to u_k for k<Ln (assumption: not stated in the paper)
     x0: tuple = (0.1, -0.1)
     dt: float = 0.1
 

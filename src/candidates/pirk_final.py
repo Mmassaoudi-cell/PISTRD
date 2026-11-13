@@ -17,12 +17,12 @@ Two complementary branches, OR-fused with per-branch calibrated thresholds:
   wrong time) -- this branch exists for the robustness experiments testing
   PARTIAL/subset replay attacks (only some sensors spoofed), where spatial
   self-consistency genuinely breaks and this branch is expected to matter
-  (see ROBUSTNESS_RESULTS / SOURCE_WEAKNESS_ANALYSIS.md discussion).
+  (see src/robustness/partial_replay.py).
 
 Each branch's threshold is calibrated on VAL alone at a target per-branch
 false-alarm rate (alpha/2 each, so the OR-fused overall FAR budget is
 approximately controlled at alpha via a Bonferroni-style split) --
-replacing the source paper's max-of-sample threshold (W1) with an
+replacing the source paper's max-of-sample threshold with an
 analytically stated, controllable false-alarm target.
 """
 import numpy as np

@@ -1,4 +1,4 @@
-"""Response to Domain Reviewer W3: the main study uses DC power flow
+"""AC power-flow validation: the main study uses DC power flow
 (no voltage magnitude, no reactive power, no losses). This builds a FULL
 parallel case14 train/val/test dataset using AC power flow (pp.runpp) --
 the same chronological split, same real PJM load driver, same attack
@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT / "src" / "eval"))
 
 from testbeds import get_testbed
 from simulate import load_multiplier_series
-from attacks import generate_scenario, scenario_to_labels
+from attacks import generate_scenario, scenario_to_labels, stable_seed
 from pirk_final import PISTRD
 from metrics import evaluate_model
 
@@ -69,7 +69,7 @@ def build_stats(line_flow, n_line, t0, t1, split_name, train_std):
     dither_std = DITHER_FRAC * train_std
     rows = []
     for sidx in range(N_SCENARIOS):
-        rng = np.random.default_rng(hash(("ac", split_name, sidx)) % (2**32))
+        rng = np.random.default_rng(stable_seed("ac", split_name, sidx))
         scenario = generate_scenario(W, Tb, rng)
         e = rng.normal(0.0, noise_std, size=(Tb, n_line))
         d = rng.normal(0.0, dither_std, size=(Tb, n_line))

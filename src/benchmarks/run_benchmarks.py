@@ -1,11 +1,11 @@
 """Runs the final model (PISTRD) + 10+ benchmark suite against the FROZEN
-TEST split (FINAL_MODEL_CONFIG.yaml is already frozen; this script does not
+TEST split (configs/pistrd_final.yaml is already frozen; this script does not
 alter it). Threshold selection is always fit on VAL only, per src/eval/metrics.py.
 
-Seeds: 5 for fast stochastic tabular models (RF/ExtraTrees/XGBoost/LightGBM/
-CatBoost/MLP), 3 for the compute-heavy DL/candidate models (LSTM/Transformer/
-STGAT/TCN-CP), matching the screening-stage precedent -- documented here
-rather than silently padded to a uniform number.
+Seeds: 20 for fast stochastic tabular models (RF/ExtraTrees/HistGB/XGBoost/
+LightGBM/CatBoost/MLP), 3 for the compute-heavy DL/candidate models (LSTM/
+Transformer/STGAT/TCN-CP), 1 for deterministic methods -- stated here rather
+than silently padded to a uniform number.
 """
 from pathlib import Path
 import sys
@@ -37,9 +37,9 @@ OUT = ROOT / "results" / "benchmarks"
 OUT.mkdir(parents=True, exist_ok=True)
 RESULTS_CSV = OUT / "benchmark_results.csv"
 
-SEEDS_FAST = tuple(range(20))  # bumped from 5->20: with only 5 seeds, a per-testbed
-# sign test can never reach p<0.05 (min possible two-sided p at n=5 is 0.0625) --
-# see review/STATISTICAL_POWER_FIX.md. 20 seeds gives min p=2*0.5^20=1.9e-6.
+SEEDS_FAST = tuple(range(20))  # with only 5 seeds a per-testbed sign test can
+# never reach p<0.05 (the smallest two-sided p at n=5 is 0.0625); 20 seeds give
+# a smallest attainable p of 2*0.5^20 = 1.9e-6.
 SEEDS_DL = (0, 1, 2)
 EPOCHS_DL = 30
 

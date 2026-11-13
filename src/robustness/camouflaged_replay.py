@@ -1,4 +1,4 @@
-"""Response to Perspective Reviewer W1 (adaptive-adversary gap): all main
+"""Timing-camouflage (adaptive-adversary) experiment: all main
 experiments replay data recorded only 5-30 hours earlier -- within real
 load's autocorrelation timescale, but NOT deliberately chosen by an attacker
 to minimize detectability. This experiment models an INFORMED attacker who
@@ -18,11 +18,13 @@ sys.path.insert(0, str(ROOT / "src" / "candidates"))
 sys.path.insert(0, str(ROOT / "src" / "eval"))
 sys.path.insert(0, str(ROOT / "src" / "pipeline"))
 
+from attacks import stable_seed
 from pirk_final import PISTRD
 from metrics import compute_metrics, best_threshold_by_f1
 
 DATA = ROOT / "results" / "data"
 OUT = ROOT / "results" / "robustness"
+OUT.mkdir(parents=True, exist_ok=True)
 TESTBEDS = {"case14": 15, "case39": 35, "case57": 63, "case118": 173}
 W = 12
 N_SCENARIOS = 6
@@ -67,7 +69,7 @@ def build_camouflaged_test(testbed, n_line, offset_days, t0, t1):
 
     rows = []
     for sidx in range(N_SCENARIOS):
-        rng = np.random.default_rng(hash((testbed, "camo", offset_days, sidx)) % (2**32))
+        rng = np.random.default_rng(stable_seed(testbed, "camo", offset_days, sidx))
         scenario = camouflaged_scenario(W, Tb, offset_days, rng)
         e = rng.normal(0.0, noise_std, size=(Tb, n_line))
         d = rng.normal(0.0, dither_std, size=(Tb, n_line))
@@ -88,7 +90,7 @@ def build_camouflaged_test(testbed, n_line, offset_days, t0, t1):
 
 def main():
     rows = []
-    manifest = pd.read_csv(ROOT / "DATA_SPLIT_MANIFEST.csv")
+    manifest = pd.read_csv(DATA / "DATA_SPLIT_MANIFEST.csv")
     for testbed, n_line in TESTBEDS.items():
         r = manifest[(manifest.testbed == testbed) & (manifest.split == "test")].iloc[0]
         t0, t1 = int(r.t_start), int(r.t_end)
@@ -101,7 +103,7 @@ def main():
         # offset_days=1,2,3: informed attacker replays same-hour-previous-day(s)
         # data specifically to exploit daily periodicity (the camouflage attack).
         # Compare against the main-results random-offset (5-30h) numbers already
-        # reported in Table II as the uninformed-attacker baseline.
+        # reported in the main benchmark table as the uninformed-attacker baseline.
         for offset_days in (1, 2, 3):
             df_test = build_camouflaged_test(testbed, n_line, offset_days, t0, t1)
             csv_path = OUT / f"_tmp_camo_{testbed}_{offset_days}.csv"

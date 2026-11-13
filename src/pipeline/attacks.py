@@ -1,7 +1,17 @@
 """Randomized generalization of the source paper's 3 replay-attack strategies
 (continuous / periodic / aperiodic) to arbitrary time ranges, for building a
 diverse labeled dataset instead of 3 fixed scenarios."""
+import zlib
+
 import numpy as np
+
+
+def stable_seed(*parts) -> int:
+    """Deterministic 32-bit RNG seed built from the given parts. Python's
+    built-in hash() of strings is salted per interpreter process, so it cannot
+    be used to seed reproducible experiments; CRC32 is stable across runs,
+    machines, and Python versions."""
+    return zlib.crc32("|".join(str(p) for p in parts).encode("utf-8"))
 
 
 def generate_scenario(t0: int, t1: int, rng: np.random.Generator,
